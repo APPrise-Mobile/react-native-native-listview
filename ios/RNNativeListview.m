@@ -56,6 +56,11 @@
   return self;
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+  [_bridge.eventDispatcher sendAppEventWithName:@"onScrollEnd" body:nil];
+}
+
 - (void)dealloc {
   [self removeObserver:self forKeyPath:@"self.numRows"];
 }

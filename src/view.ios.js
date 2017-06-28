@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { requireNativeComponent, Dimensions } from 'react-native';
+import { requireNativeComponent, Dimensions, NativeAppEventEmitter } from 'react-native';
 import NativeListviewItem from './item';
 const RNTableViewChildren = requireNativeComponent('RNNativeListview', null);
 
@@ -9,6 +9,17 @@ class NativeListview extends Component {
     const binding = [];
     for (let i = 0; i < 100; i++) binding.push(-1);
     this.state = { binding };
+
+    this._onScrollEnd = this._onScrollEnd.bind(this)
+    this.onScrollListener = NativeAppEventEmitter.addListener('onScrollEnd', this._onScrollEnd)
+  }
+
+  componentWillUnmount() {
+    if (this.onScrollListener) this.onScrollListener.remove();
+  }
+
+  _onScrollEnd() {
+    if (this.props.onScrollEnd) this.props.onScrollEnd()
   }
 
   render() {
@@ -48,6 +59,7 @@ class NativeListview extends Component {
 
 NativeListview.propTypes = {
   numRows: React.PropTypes.number.isRequired,
+  onScrollEnd: React.PropTypes.func,
   rowHeight: React.PropTypes.number.isRequired,
   renderRow: React.PropTypes.func
 };
