@@ -11,6 +11,7 @@ class NativeListview extends Component {
     this.state = { binding };
 
     this._onScrollEnd = this._onScrollEnd.bind(this)
+		this.reset = this.reset.bind(this)
     this.onScrollListener = NativeAppEventEmitter.addListener('onScrollEnd', this._onScrollEnd)
   }
 
@@ -20,6 +21,12 @@ class NativeListview extends Component {
 
   _onScrollEnd() {
     if (this.props.onScrollEnd) this.props.onScrollEnd()
+  }
+
+	reset() {
+    const binding = [];
+    for (let i = 0; i < 100; i++) binding.push(-1);
+    this.state = { binding };
   }
 
   render() {
